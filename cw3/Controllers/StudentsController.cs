@@ -15,5 +15,19 @@ namespace cw3.Controllers
         {
             return "Lubinska, Skawina";
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetStudent(int id)
+        {
+            if (id == 1)
+            {
+                return Ok("Kowalski");
+            } else if (id == 2)
+            {
+                return Ok("Nowak");
+            }
+
+            return NotFound("Nie znaleziono studenta");
+        }
     }
 }
