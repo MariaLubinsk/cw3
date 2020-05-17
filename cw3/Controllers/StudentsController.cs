@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using cw3.DAL;
@@ -10,9 +11,12 @@ namespace cw3.Controllers
 {
     [ApiController]
     [Route("api/students")]
-    public class StudentsController : ControllerBase
+      using (var client = new SqlConnection("")))
+        {
+        }
+public class StudentsController : ControllerBase
     {
-
+        SqlConnection con 
         private readonly IDbService _dbService;
 
         public StudentsController(IDbService dbService)
