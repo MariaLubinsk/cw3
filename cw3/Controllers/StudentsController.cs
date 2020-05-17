@@ -11,29 +11,41 @@ namespace cw3.Controllers
 {
     [ApiController]
     [Route("api/students")]
-      using (var client = new SqlConnection("")))
-        {
-        }
+
 public class StudentsController : ControllerBase
     {
-        SqlConnection con 
-        private readonly IDbService _dbService;
 
-        public StudentsController(IDbService dbService)
-        {
-            _dbService = dbService;
-        }
+        private const string ConString = "Data Source=localhost, 1433;Initial Catalog=sa;Integrated Security=True";
+        
 
         [HttpGet]
-        public string GetStudents(string orderBy)
+        public IActionResult GetStudents()
         {
-            return Ok(_dbService.GetStudents());
+            var studentList = new List<Student>();
+
+            using (SqlConnection con = new SqlConnection(ConString))
+            using (SqlCommand com = new SqlCommand())
+            {
+                com.Connection = con;
+                com.CommandText = "Select * from Students";
+
+                con.Open();
+                SqlDataReader dr = com.ExecuteReader();
+                while (dr.Read())
+                {
+                    var st = new Student();
+                    st.FirstName = dr["FirstName"].ToString();
+                    st.LastName = dr["LastName"].ToString();
+                    st.IndexNumber = dr["IndexNumber"].ToString();
+                }
+            }
+            return Ok(studentList);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetStudent(int id)
         {
-            if (id == 1)
+            if (id == 1)  
             {
                 return Ok("Kowalski");
             } else if (id == 2)
