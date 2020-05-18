@@ -49,7 +49,8 @@ public class StudentsController : ControllerBase
             using (SqlCommand com = new SqlCommand())
             {
                 com.Connection = con;
-                com.CommandText = "Select * from Students where indexnumber ='" +id+"'";
+                com.CommandText = "Select * from Students where indexnumber = @id";
+                com.Parameters.AddWithValue("id", id);
 
                 con.Open();
                 var dr = com.ExecuteReader();
