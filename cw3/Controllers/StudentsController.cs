@@ -45,15 +45,25 @@ public class StudentsController : ControllerBase
         [HttpGet("{id}")]
         public IActionResult GetStudent(int id)
         {
-            if (id == 1)  
+            using (SqlConnection con = new SqlConnection(ConString))
+            using (SqlCommand com = new SqlCommand())
             {
-                return Ok("Kowalski");
-            } else if (id == 2)
-            {
-                return Ok("Nowak");
+                com.Connection = con;
+                com.CommandText = "Select * from Students where indexnumber ='" +id+"'";
+
+                con.Open();
+                var dr = com.ExecuteReader();
+                if (dr.Read())
+                {
+                    var st = new Student();
+                    st.IndexNumber = dr["IndexNumber"].ToString();
+                    st.FirstName = dr["FirstName"].ToString();
+                    st.LastName = dr["LastName"].ToString();
+                    return Ok(st);
+                }
             }
 
-            return NotFound("Nie znaleziono studenta");
+            return NotFound("Nie znaleziono");
         }
 
         [HttpPost]
